@@ -1,0 +1,21 @@
+from flask import Flask, request, jsonify, render_template
+import pickle
+import numpy as np
+
+app = Flask(__name__)
+
+def home():
+    return render_template("index.html")
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    data = request.json["cases"]   # single value
+    prediction = model.decision_function([[data]])
+    
+    risk_score = float((1 - prediction[0]) * 100)
+
+    return jsonify({"risk_score": risk_score})
+
+
+if __name__ == "__main__":
+    app.run(debug=True, use_reloader=False)

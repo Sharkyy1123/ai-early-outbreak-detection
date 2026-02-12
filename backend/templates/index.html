@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Early Outbreak Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: #111;
+            color: white;
+        }
+
+        .risk-box {
+            font-size: 60px;
+            margin: 20px;
+        }
+
+        .alert {
+            font-size: 24px;
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🛡 AI-Powered Early Outbreak Detection</h1>
+
+<div class="risk-box" id="risk">--%</div>
+<div class="alert" id="alert"></div>
+
+<canvas id="chart" width="600" height="300"></canvas>
+
+<script>
+let ctx = document.getElementById("chart").getContext("2d");
+
+let chart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Outbreak Risk %",
+            data: [],
+            borderColor: "red",
+            fill: false
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                min: 0,
+                max: 120
+            }
+        }
+    }
+});
+
+function updateRisk() {
+
+    // simulate daily case count (0 - 80,000)
+    let cases = Math.floor(Math.random() * 80000);
+
+    fetch("/predict", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({cases: cases})
+    })
+    .then(res => res.json())
